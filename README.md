@@ -110,10 +110,13 @@ devchat/
 ## Screenshots 📸
 
 ### Login Experience
-![Login Screen](file:///C:/Users/Shalu/.gemini/antigravity/brain/49d4c896-a15a-427a-bfaa-a07fd900936f/devchat_login_page_1773948184038.png)
+
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/fd9188d0-612d-4cfb-b620-27619891aabd" />
+
 
 ### Registration
-![Register Screen](file:///C:/Users/Shalu/.gemini/antigravity/brain/49d4c896-a15a-427a-bfaa-a07fd900936f/devchat_register_page_1773948203405.png)
+
+<img width="2880" height="1800" alt="image" src="https://github.com/user-attachments/assets/b85128e5-0e50-4735-8e10-a8b93291f33e" />
 
 ## Future Improvements 🚀
 
