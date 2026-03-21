@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+
 const API = import.meta.env.VITE_API_URL;
 
 const Register = () => {
@@ -25,17 +26,22 @@ const Register = () => {
     e.preventDefault();
     setApiError("");
     if (!validate()) return;
+
     try {
       setLoading(true);
-      const res = axios.post(`${API}/api/auth/register`, {
+
+      const res = await axios.post(`${API}/api/auth/register`, {
         name: form.name,
         email: form.email,
         password: form.password,
       });
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+
       navigate("/dashboard");
     } catch (err) {
+      console.error(err);
       setApiError(err.response?.data?.msg || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
@@ -45,13 +51,17 @@ const Register = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       setLoading(true);
-      const res = axios.post(`${API}/api/auth/google`, {
+
+      const res = await axios.post(`${API}/api/auth/google`, {
         credential: credentialResponse.credential,
       });
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+
       navigate("/dashboard");
     } catch (err) {
+      console.error(err);
       setApiError("Google Sign-Up Failed. Please try again.");
     } finally {
       setLoading(false);
@@ -68,81 +78,45 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">Display Name</label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className={`w-full bg-[#374151] border ${errors.name ? 'border-red-500' : 'border-transparent'} rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500`}
-              placeholder="John Doe"
-            />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-          </div>
+          <input
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            placeholder="Name"
+          />
 
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">Email</label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className={`w-full bg-[#374151] border ${errors.email ? 'border-red-500' : 'border-transparent'} rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500`}
-              placeholder="you@example.com"
-            />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-          </div>
+          <input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="Email"
+          />
 
-          <div>
-            <label className="block text-xs text-gray-400 mb-1">Password</label>
-            <div className={`relative w-full bg-[#374151] border ${errors.password ? 'border-red-500' : 'border-transparent'} rounded-md flex items-center focus-within:ring-1 focus-within:ring-blue-500`}>
-              <input
-                type={showPassword ? "text" : "password"}
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full bg-transparent py-2 px-3 text-white text-sm focus:outline-none"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="pr-3 text-xs text-gray-400 hover:text-gray-200"
-              >
-                {showPassword ? "Show" : "Hide"}
-              </button>
-            </div>
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-          </div>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            placeholder="Password"
+          />
 
-          {apiError && <p className="text-red-500 text-xs mt-1">{apiError}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-md font-medium text-sm transition-colors mt-6"
-          >
-            {loading ? "Creating account..." : "Register"}
+          <button type="submit">
+            {loading ? "Creating..." : "Register"}
           </button>
+
+          {apiError && <p>{apiError}</p>}
         </form>
 
-        <div className="mt-4 flex justify-center w-full">
-          <div className="w-full flex justify-center [&>div]:w-full [&>div>div]:w-full">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => setApiError("Google Sign-Up was unsuccessful.")}
-              theme="filled_black"
-              shape="rectangular"
-              text="signup_with"
-              width="100%"
-            />
-          </div>
+        <div className="mt-4 flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setApiError("Google Sign-Up failed")}
+            width="300"   // ✅ FIXED
+          />
         </div>
 
-        <div className="mt-6 text-center text-sm text-gray-400">
-          Already have an account?{" "}
-          <Link to="/" className="text-blue-500 hover:underline">
-            Login
-          </Link>
-        </div>
+        <p>
+          Already have an account? <Link to="/">Login</Link>
+        </p>
       </div>
     </div>
   );
