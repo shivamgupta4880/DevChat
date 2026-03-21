@@ -8,9 +8,14 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? process.env.FRONTEND_URL.split(",") 
-  : ["http://localhost:5173", "http://localhost:3000"];
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "http://localhost:3000",
+  "https://dev-chat-wine.vercel.app"
+];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(...process.env.FRONTEND_URL.split(","));
+}
 
 // Middleware
 app.use(cors({
