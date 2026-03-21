@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+const API = import.meta.env.VITE_API_URL;
 
 const Register = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Register = () => {
     if (!validate()) return;
     try {
       setLoading(true);
-      const res = await axios.post("/api/auth/register", {
+      const res = axios.post(`${API}/api/auth/register`, {
         name: form.name,
         email: form.email,
         password: form.password,
@@ -44,7 +45,7 @@ const Register = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       setLoading(true);
-      const res = await axios.post("/api/auth/google", {
+      const res = axios.post(`${API}/api/auth/google`, {
         credential: credentialResponse.credential,
       });
       localStorage.setItem("token", res.data.token);
@@ -60,7 +61,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#111827] text-gray-300 font-sans p-4">
       <div className="bg-[#1f2937] p-8 rounded-2xl shadow-2xl w-full max-w-sm">
-        
+
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-white mb-2">DevChat</h1>
           <p className="text-gray-400 text-sm">Create an account</p>
