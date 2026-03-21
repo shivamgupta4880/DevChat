@@ -128,5 +128,5 @@ devchat/
 ## Author ✍️
 
 **[Your Name / Username]**
-- GitHub: [@shivamgupta4880](https://github.com/shivamgupta4880)
+- GitHub: [@yourusername](https://github.com/yourusername)
 - Twitter: [@yourhandle](https://twitter.com/yourhandle)
